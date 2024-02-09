@@ -17,8 +17,8 @@ def main():
     filePath = str(input())
     report = filePath.replace('zip', 'csv')
     
-    with open('./' + report, 'w', newline='') as csvfile:
-        fieldnames = ['Archivo','Fecha', 'TipoDeComprobante', 'MetodoPago', 'SubTotal', 'Num Conceptos', 'Clave Unidad','Descripcion', 'Cantidad','Valor Unitario', 'Importe Concepto','SumImporte','Diferencia','Nota','Base','Impuesto','TipoFactor','TasaOCuota','Importe Impuesto', 'Total Impuestos', 'Total Impuestos Trasladados']
+    with open(report, 'w', newline='') as csvfile:
+        fieldnames = ['Emisor', 'RFC','Archivo','Fecha','TipoDeComprobante', 'MetodoPago', 'SubTotal', 'Num Conceptos', 'Clave Unidad','Descripcion', 'Cantidad','Valor Unitario', 'Importe Concepto','SumImporte','Diferencia','Nota','Base','Impuesto','TipoFactor','TasaOCuota','Importe Impuesto', 'Total Impuestos', 'Total Impuestos Trasladados']
         writer = csv.writer(csvfile)
         writer.writerow(fieldnames)
     
@@ -41,6 +41,13 @@ def main():
             metodoPago = root.attrib.get('MetodoPago')
             subTotal = round(float(root.attrib.get('SubTotal')),3)    
             
+            emisor = root.findall('.//{http://www.sat.gob.mx/cfd/4}Emisor')
+            nombre = ''
+            rfc = ''
+            for emi in emisor:
+                nombre = str(emi.get('Nombre'))
+                rfc = str(emi.get('Rfc'))                
+            
             totalImpuestosTrasladados = 0
             impuestos = root.findall('.//{http://www.sat.gob.mx/cfd/4}Impuestos')            
             for impuesto in impuestos:
@@ -49,7 +56,7 @@ def main():
                     break
             
             conceptos = root.find('.//{http://www.sat.gob.mx/cfd/4}Conceptos')
-            info1 = [file,fecha, tipoComprobante, metodoPago, subTotal, len(conceptos)]            
+            info1 = [nombre, rfc,file, fecha, tipoComprobante, metodoPago, subTotal, len(conceptos)]            
             sumImporte = 0
             sumImporteImpuesto = 0            
             for index, concepto in enumerate(conceptos.findall('.//{http://www.sat.gob.mx/cfd/4}Concepto')):                            
