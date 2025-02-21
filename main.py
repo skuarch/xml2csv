@@ -17,7 +17,7 @@ def main():
     filePath = str(input())
     report = filePath.replace('zip', 'csv')
     
-    with open(report, 'w', newline='') as csvfile:
+    with open(report, 'w', newline='', encoding="utf-8") as csvfile:
         fieldnames = ['Emisor', 'RFC','Archivo','Fecha','TipoDeComprobante', 'MetodoPago', 'SubTotal', 'Num Conceptos', 'Clave Unidad','Descripcion', 'Cantidad','Valor Unitario', 'Importe Concepto','SumImporte','Diferencia','Nota','Base','Impuesto','TipoFactor','TasaOCuota','Importe Impuesto', 'Total Impuestos', 'Total Impuestos Trasladados']
         writer = csv.writer(csvfile)
         writer.writerow(fieldnames)
